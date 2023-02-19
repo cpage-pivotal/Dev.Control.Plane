@@ -34,9 +34,9 @@ jobs:
       - name: dotnet publish
         run: |
           dotnet publish --os linux --arch x64 /t:PublishContainer -c Release
-          docker login myfmacr.azurecr.io --username ${{secrets.ACR_USR}} --password ${{secrets.ACR_LOGIN}}
-          docker tag dev.control.plane-app:1.0.0 myfmacr.azurecr.io/dcp:latest
-          docker push myfmacr.azurecr.io/dcp:latest
+          docker login ${{secrets.REGISTRY_URL}} --username ${{secrets.ACR_USR}} --password ${{secrets.ACR_LOGIN}}
+          docker tag dev.control.plane-app:1.0.0 ${{secrets.REGISTRY_URL}}/dcp:latest
+          docker push ${{secrets.REGISTRY_URL}}/dcp:latest
           
 
   deploy:

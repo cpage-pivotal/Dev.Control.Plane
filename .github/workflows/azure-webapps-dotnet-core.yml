@@ -24,12 +24,14 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2.4.1
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        uses: docker/setup-buildx-action@v2.4.1
         run: |
           dotnet publish --os linux --arch x64 /t:PublishContainer -c Release
           docker login myfmacr.azurecr.io --username myfmacr --password ${{secrets.ACR_LOGIN}}

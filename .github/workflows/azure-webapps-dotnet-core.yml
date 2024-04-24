@@ -23,8 +23,4 @@ jobs:
         run: |
           git config --global user.email "github@humana.com"
           git config --global user.name "Github Action"
-          git add .
-          git commit -m "Promote to supply chain"
-          git push origin supply-chain
-
-      
+          git push --force -u origin supply-chain

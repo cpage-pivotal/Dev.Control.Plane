@@ -23,4 +23,6 @@ jobs:
         run: |
           git config --global user.email "github@humana.com"
           git config --global user.name "Github Action"
+          git branch -d supply-chain
+          git checkout -b supply-chain
           git push --force -u origin supply-chain

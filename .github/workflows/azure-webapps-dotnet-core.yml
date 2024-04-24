@@ -21,8 +21,6 @@ jobs:
 
       - name: Push to Supply Chain Branch
         run: |
-          git checkout -b main
-          git add .
           git push origin supply-chain
 
       

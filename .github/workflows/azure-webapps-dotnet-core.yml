@@ -8,21 +8,29 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  build:
-    runs-on: ubuntu-latest
 
+  merge-branch:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        name: Checkout Code
+      - uses: everlytic/branch-merge@1.1.2
+        with:
+          github_token: ${{ github.token }}
+          source_ref: ${{ github.ref }}
+          target_branch: 'supply-chain'
+          commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
+  # build:
+  #   runs-on: ubuntu-latest
 
-      - name: Push to Supply Chain Branch
-        run: |
-          git config --global user.email "github@humana.com"
-          git config --global user.name "Github Action"
-          git branch -d supply-chain
-          git checkout -b supply-chain
-          git push --force -u origin supply-chain
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       name: Checkout Code
+
+  #     - name: Push to Supply Chain Branch
+  #       run: |
+  #         git config --global user.email "github@humana.com"
+  #         git config --global user.name "Github Action"
+  #         git branch -d supply-chain
+  #         git checkout -b supply-chain
+  #         git push --force -u origin supply-chain

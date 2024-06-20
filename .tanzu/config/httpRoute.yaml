@@ -1,0 +1,26 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: dev-control-route
+  annotations:
+    healthcheck.gslb.tanzu.vmware.com/service: dev-control
+    healthcheck.gslb.tanzu.vmware.com/path: /
+    healthcheck.gslb.tanzu.vmware.com/port: "8080"
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: default-gateway
+    sectionName: https-ci-dev-control
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: dev-control
+      port: 8080
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+

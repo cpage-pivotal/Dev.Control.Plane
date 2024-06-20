@@ -1,22 +1,22 @@
-name: Build and deploy ASP.Net Core app to an Azure Web App
-
-env:
-  DOTNET_VERSION: '7.0.x'                 # set this to the .NET Core version to use
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
+name: tanzu-deploy-workflow
+on: [push]
 jobs:
-
-  merge-branch:
+  tanzu_deploy_job:
     runs-on: ubuntu-latest
+    name: Deploy to Tanzu Platform on Commit
     steps:
-      - uses: actions/checkout@v4
-      - uses: everlytic/branch-merge@1.1.2
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
         with:
-          github_token: ${{ github.token }}
-          source_ref: ${{ github.ref }}
-          target_branch: 'supply-chain'
-          commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
+          registry: tanzuplatform.azurecr.io
+          username: ${{ secrets.RepositoryUsername }}
+          password: ${{ secrets.RepositoryPassword }}
+      - name: Deploy application to Tanzu Platform
+        uses: cpage-pivotal/tanzu-deploy-action@v1.3
+        with:
+          tanzu_api_token: ${{ secrets.TanzuApiToken }}
+          container_registry: tanzuplatform.azurecr.io/build/dev-control
+          project: AMER-West
+          space: dotnet-space
